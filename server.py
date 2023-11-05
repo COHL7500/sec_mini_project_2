@@ -2,15 +2,17 @@ import socket
 from threading import Thread
 from time import sleep
 
+import PeerFactory
 from config import Config
 from patient import Patient
 
 
 class Server(Thread):
-    def __init__(self, config):
+    def __init__(self, config, peer_factory: PeerFactory.PeerFactory):
         super(Server, self).__init__()
         self.config = config
         self.peers = []
+        self.peer_factory = peer_factory
 
         self.setup_server_socket()
 
@@ -47,7 +49,8 @@ class Server(Thread):
         ):
 
             if client_port != Config.num_port:
-                self.peers.append(Patient(self.config, client_port, len(self.peers) + 1))
+                self.peers.append(self.peer_factory.create_peer(self.config, client_port, len(self.peers) + 1))
+               # self.peers.append(Patient(self.config, client_port, len(self.peers) + 1))
 
     def wait_for_peers(self):
         while True:
