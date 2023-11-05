@@ -11,10 +11,10 @@ def main():
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     context.load_verify_locations(CERT_PATH)
 
-    patient_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    patient_socket.connect((HOSPITAL_NAME, HOSPITAL_PORT))
+    peer_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    peer_socket.connect((HOSPITAL_NAME, HOSPITAL_PORT))
 
-    patient_socket = context.wrap_socket(patient_socket, server_hostname=HOSPITAL_NAME)
+    patient_socket = context.wrap_socket(peer_socket, server_hostname=HOSPITAL_NAME)
 
     while True:
         request = input("Enter your medical request: ")
