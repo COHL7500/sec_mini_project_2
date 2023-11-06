@@ -5,7 +5,7 @@ from config import Config
 from server import Server
 
 
-def mpc_algo(value, parts):
+def mpc_algo(value: int, parts: int):
     shares = [round(value / parts)] * parts
     remainder = value % parts
 
@@ -24,35 +24,33 @@ def main():
     server.start()
     server.wait_for_peers()
 
-    # patients
+    # If not hospital (thus patient)...
     if int(config.peer_id) != 0:
 
-        # Three-Party Computation - addition
-        # input
-        val = mpc_algo(randrange(25, 100), config.peer_amount)
-        server.send_message_to_peer(1, str(val[1]))
-        server.send_message_to_peer(2, str(val[2]))
+        # Performing MPC computation
+        mpc_res = mpc_algo(randrange(25, 100), config.peer_amount)
+        server.send_message_to_peer(1, str(mpc_res[1]))
+        server.send_message_to_peer(2, str(mpc_res[2]))
 
         # addition
-        p2 = server.get_message_from_peer(1)
-        p3 = server.get_message_from_peer(2)
-        out = val[0] + int(p2) + int(p3)
+        p2_message = server.get_message_from_peer(1)
+        p3_message = server.get_message_from_peer(2)
+        result = mpc_res[0] + int(p2_message) + int(p3_message)
 
         # output
-        server.send_message_to_peer(0, str(out))
-        print(f"val: {val}, p2: {p2}, p3: {p3}, out: {out}")
+        server.send_message_to_peer(0, str(result))
+        print(f"mpc_res: {mpc_res}, p2: {p2_message}, p3: {p3_message}, out: {result}")
 
-    # hospital
+    # ...Otherwise (thus Hospital)
     else:
 
-        # output
-        out1 = server.get_message_from_peer(0)
-        out2 = server.get_message_from_peer(1)
-        out3 = server.get_message_from_peer(2)
+        p1_calc = server.get_message_from_peer(0)
+        p2_calc = server.get_message_from_peer(1)
+        p3_calc = server.get_message_from_peer(2)
 
         # aggregated value
-        total = int(out1) + int(out2) + int(out3)
-        print(f"out1: {out1}, out2: {out2}, out3: {out3}, aggr: {total}")
+        total = int(p1_calc) + int(p2_calc) + int(p3_calc)
+        print(f"out1: {p1_calc}, out2: {p2_calc}, out3: {p3_calc}, aggr: {total}")
 
 
 # main call
