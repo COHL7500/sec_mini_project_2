@@ -8,5 +8,6 @@ class Config:
     peer_amount = 3
     max_port = peer_amount + 1
     peer_id = int(argv[1])
-    hospital_port = 5000
+    hospital_port = 1337
     num_port = hospital_port + max_port * peer_id
+    p_rand_max = 1361 # Prime
