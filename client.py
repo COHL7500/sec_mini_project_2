@@ -14,7 +14,8 @@ class Patient:
         self.total_connected = 0
         self.msg_tag = f"({self.id} : {self.port})"
 
-        threading.Thread(target=self.setup_connection).start()
+        thread = threading.Thread(target=self.setup_connection)
+        thread.start()
 
     def setup_connection(self):
         ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)

@@ -1,12 +1,12 @@
 import socket
 from threading import Thread
 from time import sleep
-import PeerFactory
+import peer_factory
 from config import Config
 
 
 class Server(Thread):
-    def __init__(self, config: Config, peer_factory: PeerFactory.PeerFactory):
+    def __init__(self, config: Config, peer_factory: peer_factory.PeerFactory):
         super(Server, self).__init__()
         self.server_socket = None
         self.config = config
@@ -55,12 +55,14 @@ class Server(Thread):
     def wait_for_peers(self):
         while True:
             for p in self.peer_list:
+
                 if p.total_connected != 2:
                     sleep(2)
                     break
-            else:
-                print("Successfully connected all peers!")
-                return
+
+                else:
+                    print("Successfully connected all peers!")
+                    return
 
     def get_message_from_peer(self, peer: int):
         return self.peer_list[peer].get_message()

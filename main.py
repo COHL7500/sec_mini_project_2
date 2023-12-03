@@ -1,28 +1,24 @@
 from random import randrange
 
-from PeerFactory import PatientFactory
+from peer_factory import PatientFactory
 from config import Config
 from server import Server
 
 config = Config()
 
 
-def mpc_algo(value: int, parts: int):
+def secret_sharing(value: int, parts: int):
+    # generate a list of random shares based on parts amount
     shares = [randrange(config.p_rand_max) for _ in range(parts)]
+
+    # calculate remainder to make sum of shares divisible by p_rand_max
     remainder = value - sum(shares) % config.p_rand_max
 
+    # increment random shares until remainder is zero
     for i in range(remainder):
         sel_share_idx = randrange(parts)
         shares[sel_share_idx] = (shares[sel_share_idx] + 1) % config.p_rand_max
 
-    '''
-    shares = [round(value / parts)] * parts
-    remainder = value % parts
-
-    for _ in range(remainder):
-        sel_share_idx = randrange(0, len(shares))
-        shares[sel_share_idx] += 1
-    '''
     return shares
 
 
@@ -37,7 +33,7 @@ def main():
     if int(config.peer_id) != 0:
 
         # Performing MPC computation
-        mpc_res = mpc_algo(randrange(2, config.p_rand_max), config.peer_amount)
+        mpc_res = secret_sharing(randrange(2, config.p_rand_max), config.peer_amount)
         server.send_message_to_peer(1, str(mpc_res[1]))
         server.send_message_to_peer(2, str(mpc_res[2]))
 
