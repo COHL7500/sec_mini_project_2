@@ -6,12 +6,12 @@ from config import Config
 
 
 class Server(Thread):
-    def __init__(self, config: Config, peer_factory: peer_factory.PeerFactory):
+    def __init__(self, config: Config, factory: peer_factory.PeerFactory):
         super(Server, self).__init__()
         self.server_socket = None
         self.config = config
         self.peer_list = []
-        self.peer_factory = peer_factory
+        self.peer_factory = factory
 
         self.setup_server_socket()
 
@@ -60,9 +60,9 @@ class Server(Thread):
                     sleep(2)
                     break
 
-                else:
-                    print("Successfully connected all peers!")
-                    return
+            else:
+                print("Successfully connected all peers!")
+                return
 
     def get_message_from_peer(self, peer: int):
         return self.peer_list[peer].get_message()

@@ -33,7 +33,7 @@ def main():
     if int(config.peer_id) != 0:
 
         # Performing MPC computation
-        mpc_res = secret_sharing(randrange(2, config.p_rand_max), config.peer_amount)
+        mpc_res = secret_sharing(randrange(config.p_rand_min, config.p_rand_max), config.peer_amount)
         server.send_message_to_peer(1, str(mpc_res[1]))
         server.send_message_to_peer(2, str(mpc_res[2]))
 

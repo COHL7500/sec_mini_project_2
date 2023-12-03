@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABC
 
 from config import Config
-from client import Patient
+from client import Client
 
 
 class PeerFactory(ABC):
@@ -12,4 +12,4 @@ class PeerFactory(ABC):
 
 class PatientFactory(PeerFactory):
     def create_peer(self, config, port, id):
-        return Patient(config, port, id)
+        return Client(config, port, id)

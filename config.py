@@ -10,4 +10,5 @@ class Config:
     peer_id = int(argv[1])
     hospital_port = 1337
     num_port = hospital_port + max_port * peer_id
+    p_rand_min = 3
     p_rand_max = 1361  # Prime

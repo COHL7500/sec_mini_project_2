@@ -5,7 +5,7 @@ from time import sleep
 from config import Config
 
 
-class Patient:
+class Client:
     def __init__(self, config: Config, port: int, id: int):
         self.id = id
         self.port = port
